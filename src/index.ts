@@ -2,6 +2,7 @@ import * as http from 'http';
 import * as EventEmitter from 'events';
 import * as Koa from 'koa';
 import * as Router from 'koa-router';
+import * as bodyParser from 'koa-bodyparser';
 import * as request from 'request';
 const crypto = require('crypto');
 const config = require('../config.json');
@@ -18,6 +19,7 @@ const post = async (text: string, home = true) => {
 };
 
 const app = new Koa();
+app.use(bodyParser());
 
 const secret = config.hookSecret;
 
