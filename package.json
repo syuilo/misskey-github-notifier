@@ -1,0 +1,19 @@
+{
+  "main": "./built/index.js",
+  "scripts": {
+    "start": "node ./built",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@types/koa": "2.0.47",
+    "@types/koa-router": "7.0.35",
+    "@types/node": "10.0.5",
+    "@types/request": "2.48.1",
+    "crypto": "1.0.1",
+    "koa": "2.6.2",
+    "koa-router": "7.4.0",
+    "request": "2.87.0",
+    "ts-node": "6.0.3",
+    "typescript": "2.8.3"
+  }
+}
