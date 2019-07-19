@@ -113,7 +113,7 @@ handler.on('issue_comment', event => {
 	const action = event.action;
 	let text: string;
 	switch (action) {
-		case 'created': text = `💬 Commented to「${issue.title}」:${comment.user.login}「${comment.body}」\n${comment.html_url}`; break;
+		case 'created': text = `💬 Commented to「${issue.title}」@${comment.user.login}@github.com「${comment.body && comment.body.replace(/@[A-Za-z0-9\[\]-]+/, x => `${x}@github.com`)}」\n${comment.html_url}`; break;
 		default: return;
 	}
 	post(text);
@@ -132,7 +132,7 @@ handler.on('release', event => {
 
 handler.on('watch', event => {
 	const sender = event.sender;
-	post(`(((⭐️))) Starred by **${sender.login}** (((⭐️)))`, false);
+	post(`(((⭐️))) Starred by **@${sender.login}@github.com** (((⭐️)))`, false);
 });
 
 handler.on('fork', event => {
