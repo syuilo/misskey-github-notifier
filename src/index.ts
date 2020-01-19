@@ -13,7 +13,10 @@ const post = async (text: string, home = true) => {
 	request.post(config.instance + '/api/notes/create', {
 		json: {
 			i: config.i,
-			text, visibility: home ? 'home' : 'public'
+			text,
+			visibility: home ? 'home' : 'public',
+			noExtractMentions: true,
+			noExtractHashtags: true
 		}
 	});
 };
