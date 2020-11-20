@@ -1,5 +1,5 @@
 import * as http from 'http';
-import * as EventEmitter from 'events';
+import { EventEmitter } from 'events';
 import * as Koa from 'koa';
 import * as Router from 'koa-router';
 import * as bodyParser from 'koa-bodyparser';
@@ -28,8 +28,8 @@ const router = new Router();
 router.post('/github', ctx => {
 	const body = JSON.stringify(ctx.request.body);
 	const hash = crypto.createHmac('sha1', secret).update(body).digest('hex');
-	const sig1 = new Buffer(ctx.headers['x-hub-signature']);
-	const sig2 = new Buffer(`sha1=${hash}`);
+	const sig1 = Buffer.from(ctx.headers['x-hub-signature']);
+	const sig2 = Buffer.from(`sha1=${hash}`);
 
 	// シグネチャ比較
 	if (sig1.equals(sig2)) {
