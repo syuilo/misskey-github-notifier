@@ -132,12 +132,13 @@ handler.on('release', event => {
 
 handler.on('watch', event => {
 	const sender = event.sender;
-	post(`[jelly ⭐️] Starred by **${sender.login}** [jelly ⭐️]`, false);
+	post(`[jelly ⭐️] Starred by ?[**${sender.login}**](${sender.html_url}) [jelly ⭐️]`, false);
 });
 
 handler.on('fork', event => {
+	const sender = event.sender;
 	const repo = event.forkee;
-	post(`🍴 Forked:\n${repo.html_url} 🍴`);
+	post(`🍴 ?[Forked](${repo.html_url}) by ?[**${sender.login}**](${sender.html_url}) 🍴`);
 });
 
 handler.on('pull_request', event => {
