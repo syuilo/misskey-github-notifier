@@ -67,8 +67,8 @@ handler.on('status', event => {
 					return;
 				}
 				const parentStatuses = JSON.parse(body);
-				const parentState = parentStatuses[0].state;
-				const stillFailed = parentState == 'failure' || parentState == 'error';
+				const parentState = parentStatuses[0]?.state;
+				const stillFailed = parentState === 'failure' || parentState === 'error';
 				if (stillFailed) {
 					post(`⚠️**BUILD STILL FAILED**⚠️: ?[${commit.commit.message}](${commit.html_url})`);
 				} else {
