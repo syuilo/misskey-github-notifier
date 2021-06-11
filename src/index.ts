@@ -99,9 +99,9 @@ handler.on('issues', event => {
 	const action = event.action;
 	let title: string;
 	switch (action) {
-		case 'opened': title = '[shake 💥] Issue opened'; break;
+		case 'opened': title = '$[shake 💥] Issue opened'; break;
 		case 'closed': title = '💮 Issue closed'; break;
-		case 'reopened': title = '[shake 🔥] Issue reopened'; break;
+		case 'reopened': title = '$[shake 🔥] Issue reopened'; break;
 		default: return;
 	}
 	post(`${title}: <${issue.number}>「${issue.title}」\n${issue.html_url}`);
@@ -124,7 +124,7 @@ handler.on('release', event => {
 	const release = event.release;
 	let text: string;
 	switch (action) {
-		case 'published': text = `[twitch 🎁] **NEW RELEASE**: [${release.tag_name}](${release.html_url}) is out now. Enjoy!`; break;
+		case 'published': text = `$[twitch 🎁] **NEW RELEASE**: [${release.tag_name}](${release.html_url}) is out now. Enjoy!`; break;
 		default: return;
 	}
 	post(text);
@@ -132,7 +132,7 @@ handler.on('release', event => {
 
 handler.on('watch', event => {
 	const sender = event.sender;
-	post(`[jelly ⭐️] Starred by ?[**${sender.login}**](${sender.html_url}) [jelly ⭐️]`, false);
+	post(`$[jelly ⭐️] Starred by ?[**${sender.login}**](${sender.html_url}) $[jelly ⭐️]`, false);
 });
 
 handler.on('fork', event => {
