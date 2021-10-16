@@ -1,5 +1,7 @@
 config.json
 /built
+yarn.lock
+package-lock.json
 
 # Logs
 logs
@@ -62,3 +64,10 @@ typings/
 
 # next.js build output
 .next
+
+# Visual Studio Code
+/.vscode
+!/.vscode/extensions.json
+
+# Intelij-IDEA
+/.idea
