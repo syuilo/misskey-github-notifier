@@ -33,7 +33,8 @@ router.post('/github', ctx => {
 
 	// シグネチャ比較
 	if (sig1.equals(sig2)) {
-		handler.emit(ctx.headers['x-github-event'], ctx.request.body);
+		let ghHeader = ctx.headers['x-github-event'] as string;
+		handler.emit(ghHeader, ctx.request.body);
 		ctx.status = 204;
 	} else {
 		ctx.status = 400;
@@ -70,9 +71,9 @@ handler.on('status', event => {
 				const parentState = parentStatuses[0]?.state;
 				const stillFailed = parentState === 'failure' || parentState === 'error';
 				if (stillFailed) {
-					post(`⚠️**BUILD STILL FAILED**⚠️: ?[${commit.commit.message}](${commit.html_url})`);
+					post(`$[shake 🚨] **BUILD STILL FAILED** $[shake 🚨]: ?[${commit.commit.message}](${commit.html_url})`);
 				} else {
-					post(`🚨**BUILD FAILED**🚨: →→→?[${commit.commit.message}](${commit.html_url})←←←`);
+					post(`$[shake 🚨] **BUILD FAILED** $[shake 🚨]: → ?[${commit.commit.message}](${commit.html_url}) ←`);
 				}
 			});
 			break;
@@ -99,9 +100,9 @@ handler.on('issues', event => {
 	const action = event.action;
 	let title: string;
 	switch (action) {
-		case 'opened': title = '$[shake 💥] Issue opened'; break;
-		case 'closed': title = '💮 Issue closed'; break;
-		case 'reopened': title = '$[shake 🔥] Issue reopened'; break;
+		case 'opened': title = `$[twitch 💥] Issue opened`; break;
+		case 'closed': title = `$[jelly 💮] Issue closed`; break;
+		case 'reopened': title = `$[shake 🔥] Issue reopened`; break;
 		default: return;
 	}
 	post(`${title}: <${issue.number}>「${issue.title}」\n${issue.html_url}`);
@@ -113,7 +114,7 @@ handler.on('issue_comment', event => {
 	const action = event.action;
 	let text: string;
 	switch (action) {
-		case 'created': text = `💬 Commented to「${issue.title}」:${comment.user.login}「${comment.body}」\n${comment.html_url}`; break;
+		case 'created': text = `$[bounce 💬] Commented on "${issue.title}": ${comment.user.login} "${comment.body}"\n${comment.html_url}`; break;
 		default: return;
 	}
 	post(text);
@@ -124,7 +125,7 @@ handler.on('release', event => {
 	const release = event.release;
 	let text: string;
 	switch (action) {
-		case 'published': text = `$[twitch 🎁] **NEW RELEASE**: [${release.tag_name}](${release.html_url}) is out now. Enjoy!`; break;
+		case 'published': text = `$[tada 🎁] **NEW RELEASE**: [${release.tag_name}](${release.html_url}) is out now. Enjoy!`; break;
 		default: return;
 	}
 	post(text);
@@ -132,13 +133,13 @@ handler.on('release', event => {
 
 handler.on('watch', event => {
 	const sender = event.sender;
-	post(`$[jelly ⭐️] Starred by ?[**${sender.login}**](${sender.html_url}) $[jelly ⭐️]`, false);
+	post(`$[spin ⭐️] Starred by ?[**${sender.login}**](${sender.html_url})`, false);
 });
 
 handler.on('fork', event => {
 	const sender = event.sender;
 	const repo = event.forkee;
-	post(`🍴 ?[Forked](${repo.html_url}) by ?[**${sender.login}**](${sender.html_url}) 🍴`);
+	post(`$[spin.y 🍴] ?[Forked](${repo.html_url}) by ?[**${sender.login}**](${sender.html_url})`);
 });
 
 handler.on('pull_request', event => {
@@ -146,12 +147,12 @@ handler.on('pull_request', event => {
 	const action = event.action;
 	let text: string;
 	switch (action) {
-		case 'opened': text = `📦 New Pull Request:「${pr.title}」\n${pr.html_url}`; break;
-		case 'reopened': text = `🗿 Pull Request Reopened:「${pr.title}」\n${pr.html_url}`; break;
+		case 'opened': text = `$[sparkle 📦] New Pull Request: "${pr.title}"\n${pr.html_url}`; break;
+		case 'reopened': text = `$[jump 🗿] Pull Request Reopened: "${pr.title}"\n${pr.html_url}`; break;
 		case 'closed':
 			text = pr.merged
-				? `💯 Pull Request Merged!:「${pr.title}」\n${pr.html_url}`
-				: `🚫 Pull Request Closed:「${pr.title}」\n${pr.html_url}`;
+				? `$[tada 💯] Pull Request Merged!: "${pr.title}"\n${pr.html_url}`
+				: `$[spin 🚫] Pull Request Closed: "${pr.title}"\n${pr.html_url}`;
 			break;
 		default: return;
 	}

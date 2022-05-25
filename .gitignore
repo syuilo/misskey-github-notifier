@@ -2,6 +2,7 @@ config.json
 /built
 yarn.lock
 package-lock.json
+.yarn
 
 # Logs
 logs
