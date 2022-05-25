@@ -88,7 +88,7 @@ handler.on('push', event => {
 			const compare = event.compare;
 			const commits: any[] = event.commits;
 			post([
-				`🆕 Pushed by **${pusher.name}** with ?[${commits.length} commit${commits.length > 1 ? 's' : ''}](${compare}):`,
+				`$[sparkle 🆕] Pushed by **${pusher.name}** with ?[${commits.length} commit${commits.length > 1 ? 's' : ''}](${compare}):`,
 				commits.reverse().map(commit => `・[?[${commit.id.substr(0, 7)}](${commit.url})] ${commit.message.split('\n')[0]}`).join('\n'),
 			].join('\n'));
 			break;
@@ -105,7 +105,7 @@ handler.on('issues', event => {
 		case 'reopened': title = `$[shake 🔥] Issue reopened`; break;
 		default: return;
 	}
-	post(`${title}: <${issue.number}>「${issue.title}」\n${issue.html_url}`);
+	post(`${title}: #${issue.number} "${issue.title}"\n${issue.html_url}`);
 });
 
 handler.on('issue_comment', event => {
