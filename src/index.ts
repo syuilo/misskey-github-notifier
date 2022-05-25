@@ -71,7 +71,7 @@ handler.on('status', event => {
 				const parentState = parentStatuses[0]?.state;
 				const stillFailed = parentState === 'failure' || parentState === 'error';
 				if (stillFailed) {
-					post(`$[shake 🚨] **BUILD STILL FAILED** $[shake 🚨]: ?[${commit.commit.message}](${commit.html_url})`);
+					post(`$[shake ⚠️] **BUILD STILL FAILED** $[shake ⚠️]: ?[${commit.commit.message}](${commit.html_url})`);
 				} else {
 					post(`$[shake 🚨] **BUILD FAILED** $[shake 🚨]: → ?[${commit.commit.message}](${commit.html_url}) ←`);
 				}
