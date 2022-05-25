@@ -159,4 +159,4 @@ handler.on('pull_request', event => {
 	post(text);
 });
 
-console.log("Ready!")
+console.log("🚀 Ready! 🚀")
