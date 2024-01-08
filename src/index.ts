@@ -164,11 +164,24 @@ handler.on('pull_request', event => {
 });
 
 handler.on('pull_request_review_comment', event => {
-	const pr = event.pull_request_review_comment;
+	const pr = event.pull_request;
+	const comment = event.comment;
 	const action = event.action;
 	let text: string;
 	switch (action) {
-		case 'created': text = `💬 Commented on "${pr.title}": ${pr.user.login} "<plain>${pr.body}</plain>"\n${pr.html_url}`; break;
+		case 'created': text = `💬 Commented on "${pr.title}": ${comment.user.login} "<plain>${comment.body}</plain>"\n${comment.html_url}`; break;
+		default: return;
+	}
+	post(text);
+});
+
+handler.on('pull_request_review', event => {
+	const pr = event.pull_request;
+	const review = event.review;
+	const action = event.action;
+	let text: string;
+	switch (action) {
+		case 'submitted': text = `👀 Review submitted: "${pr.title}": ${review.user.login} "<plain>${review.body}</plain>"\n${review.html_url}`; break;
 		default: return;
 	}
 	post(text);
