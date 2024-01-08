@@ -162,4 +162,43 @@ handler.on('pull_request', event => {
 	post(text);
 });
 
+handler.on('discussion', event => {
+	const discussion = event.discussion;
+	const action = event.action;
+	let title: string;
+	let url: string;
+	switch (action) {
+		case 'created':
+			title = `💭 Discussion opened`;
+			url = discussion.html_url;
+			break;
+		case 'closed':
+			title = `💮 Discussion closed`;
+			url = discussion.html_url;
+			break;
+		case 'reopened':
+			title = `🔥 Discussion reopened`;
+			url = discussion.html_url;
+			break;
+		case 'answered':
+			title = `✅ Discussion marked awnser`;
+			url = discussion.answer_html_url;
+			break;
+		default: return;
+	}
+	post(`${title}: #${discussion.number} "${discussion.title}"\n${url}`);
+});
+
+handler.on('discussion_comment', event => {
+	const discussion = event.discussion;
+	const comment = event.comment;
+	const action = event.action;
+	let text: string;
+	switch (action) {
+		case 'created': text = `💬 Commented on "${discussion.title}": ${comment.user.login} "<plain>${comment.body}</plain>"\n${comment.html_url}`; break;
+		default: return;
+	}
+	post(text);
+});
+
 console.log("🚀 Ready! 🚀")
