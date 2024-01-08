@@ -1,0 +1,7 @@
+{
+	"instance": "https://example.com/",
+	"i": "",
+	"hookSecret": "",
+	"port": 8080,
+	"proxy": null
+}
