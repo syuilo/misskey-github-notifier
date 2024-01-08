@@ -4,8 +4,8 @@ import * as Koa from 'koa';
 import * as Router from 'koa-router';
 import * as bodyParser from 'koa-bodyparser';
 import * as request from 'request';
-const crypto = require('crypto');
-const config = require('../config.json');
+import crypto = require('crypto');
+import config = require('../config.json');
 
 const handler = new EventEmitter();
 
@@ -157,6 +157,17 @@ handler.on('pull_request', event => {
 				? `💯 Pull Request Merged!: "${pr.title}"\n${pr.html_url}`
 				: `🚫 Pull Request Closed: "${pr.title}"\n${pr.html_url}`;
 			break;
+		default: return;
+	}
+	post(text);
+});
+
+handler.on('pull_request_review_comment', event => {
+	const pr = event.pull_request_review_comment;
+	const action = event.action;
+	let text: string;
+	switch (action) {
+		case 'created': text = `💬 Commented on "${pr.title}": ${pr.user.login} "<plain>${pr.body}</plain>"\n${pr.html_url}`; break;
 		default: return;
 	}
 	post(text);
