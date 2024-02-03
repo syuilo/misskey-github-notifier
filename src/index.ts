@@ -178,6 +178,8 @@ handler.on('pull_request_review_comment', event => {
 handler.on('pull_request_review', event => {
 	const pr = event.pull_request;
 	const review = event.review;
+	if (review.body === null) return;
+
 	const action = event.action;
 	let text: string;
 	switch (action) {
@@ -206,7 +208,7 @@ handler.on('discussion', event => {
 			url = discussion.html_url;
 			break;
 		case 'answered':
-			title = `✅ Discussion marked awnser`;
+			title = `✅ Discussion marked answer`;
 			url = discussion.answer_html_url;
 			break;
 		default: return;
