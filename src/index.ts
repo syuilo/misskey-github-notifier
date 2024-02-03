@@ -178,7 +178,7 @@ handler.on('pull_request_review_comment', event => {
 handler.on('pull_request_review', event => {
 	const pr = event.pull_request;
 	const review = event.review;
-	if (review.body === null) return;
+	if (review.body === undefined || review.body === null || review.body.length <= 0) return;
 
 	const action = event.action;
 	let text: string;
