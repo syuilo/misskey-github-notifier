@@ -5,10 +5,18 @@ import * as Router from 'koa-router';
 import * as bodyParser from 'koa-bodyparser';
 import * as request from 'request';
 import crypto = require('crypto');
+import type { EventPayloadMap } from '@octokit/webhooks/dist-types/generated/webhook-identifiers';
 
 const config = require('../config.json');
 
-const handler = new EventEmitter();
+class WebhookEventEmitter extends EventEmitter {
+	on<T extends keyof EventPayloadMap>(event: T, listener: (payload: EventPayloadMap[T]) => void): this
+	on(event: string | symbol, listener: (...args: any[]) => void): this {
+		return super.on(event, listener);
+	}
+}
+
+const handler = new WebhookEventEmitter();
 
 const post = async (text: string, home = true) => {
 	request.post(config.instance + '/api/notes/create', {
