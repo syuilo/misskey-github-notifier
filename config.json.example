@@ -1,5 +1,5 @@
 {
-	"instance": "https://example.com/",
+	"instance": "https://example.com",
 	"i": "",
 	"hookSecret": "",
 	"port": 8080,
