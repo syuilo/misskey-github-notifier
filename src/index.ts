@@ -211,6 +211,10 @@ handler.on('discussion', event => {
 			title = `✅ Discussion marked answer`;
 			url = discussion.answer_html_url;
 			break;
+		case 'unanswered':
+			title = `🔥 Discussion unmarked answer`;
+			url = discussion.html_url;
+			break;
 		default: return;
 	}
 	post(`${title}: #${discussion.number} "${discussion.title}"\n${url}`);
