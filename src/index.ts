@@ -158,6 +158,7 @@ handler.on('pull_request', event => {
 				? `💯 Pull Request Merged!: "${pr.title}"\n${pr.html_url}`
 				: `🚫 Pull Request Closed: "${pr.title}"\n${pr.html_url}`;
 			break;
+		case 'ready_for_review': text = `👀 Pull Request marked as ready: "${pr.title}\n${pr.html_url}"`; break;
 		default: return;
 	}
 	post(text);
