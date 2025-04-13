@@ -5,10 +5,18 @@ import * as Router from 'koa-router';
 import * as bodyParser from 'koa-bodyparser';
 import * as request from 'request';
 import crypto = require('crypto');
+import type { EventPayloadMap } from '@octokit/webhooks/dist-types/generated/webhook-identifiers';
 
 const config = require('../config.json');
 
-const handler = new EventEmitter();
+class WebhookEventEmitter extends EventEmitter {
+	on<T extends keyof EventPayloadMap>(event: T, listener: (payload: EventPayloadMap[T]) => void): this
+	on(event: string | symbol, listener: (...args: any[]) => void): this {
+		return super.on(event, listener);
+	}
+}
+
+const handler = new WebhookEventEmitter();
 
 const post = async (text: string, home = true) => {
 	request.post(config.instance + '/api/notes/create', {
@@ -101,9 +109,8 @@ handler.on('push', event => {
 
 handler.on('issues', event => {
 	const issue = event.issue;
-	const action = event.action;
 	let title: string;
-	switch (action) {
+	switch (event.action) {
 		case 'opened': title = `💥 Issue opened`; break;
 		case 'closed': title = `💮 Issue closed`; break;
 		case 'reopened': title = `🔥 Issue reopened`; break;
@@ -115,20 +122,18 @@ handler.on('issues', event => {
 handler.on('issue_comment', event => {
 	const issue = event.issue;
 	const comment = event.comment;
-	const action = event.action;
 	let text: string;
-	switch (action) {
-		case 'created': text = `💬 Commented on "${issue.title}": ${comment.user.login} "<plain>${comment.body}</plain>"\n${comment.html_url}`; break;
+	switch (event.action) {
+		case 'created': text = `💬 Commented on "${issue.title}": ${event.sender.login} "<plain>${comment.body}</plain>"\n${comment.html_url}`; break;
 		default: return;
 	}
 	post(text);
 });
 
 handler.on('release', event => {
-	const action = event.action;
 	const release = event.release;
 	let text: string;
-	switch (action) {
+	switch (event.action) {
 		case 'published': text = `🎁 **NEW RELEASE**: [${release.tag_name}](${release.html_url}) is out. Enjoy!`; break;
 		default: return;
 	}
@@ -148,9 +153,8 @@ handler.on('fork', event => {
 
 handler.on('pull_request', event => {
 	const pr = event.pull_request;
-	const action = event.action;
 	let text: string;
-	switch (action) {
+	switch (event.action) {
 		case 'opened': text = `📦 New Pull Request: "${pr.title}"\n${pr.html_url}`; break;
 		case 'reopened': text = `🗿 Pull Request Reopened: "${pr.title}"\n${pr.html_url}`; break;
 		case 'closed':
@@ -166,10 +170,9 @@ handler.on('pull_request', event => {
 handler.on('pull_request_review_comment', event => {
 	const pr = event.pull_request;
 	const comment = event.comment;
-	const action = event.action;
 	let text: string;
-	switch (action) {
-		case 'created': text = `💬 Review commented on "${pr.title}": ${comment.user.login} "<plain>${comment.body}</plain>"\n${comment.html_url}`; break;
+	switch (event.action) {
+		case 'created': text = `💬 Review commented on "${pr.title}": ${event.sender.login} "<plain>${comment.body}</plain>"\n${comment.html_url}`; break;
 		default: return;
 	}
 	post(text);
@@ -180,10 +183,9 @@ handler.on('pull_request_review', event => {
 	const review = event.review;
 	if (review.body === undefined || review.body === null || review.body.length <= 0) return;
 
-	const action = event.action;
 	let text: string;
-	switch (action) {
-		case 'submitted': text = `👀 Review submitted: "${pr.title}": ${review.user.login} "<plain>${review.body}</plain>"\n${review.html_url}`; break;
+	switch (event.action) {
+		case 'submitted': text = `👀 Review submitted: "${pr.title}": ${event.sender.login} "<plain>${review.body}</plain>"\n${review.html_url}`; break;
 		default: return;
 	}
 	post(text);
@@ -191,10 +193,9 @@ handler.on('pull_request_review', event => {
 
 handler.on('discussion', event => {
 	const discussion = event.discussion;
-	const action = event.action;
 	let title: string;
 	let url: string;
-	switch (action) {
+	switch (event.action) {
 		case 'created':
 			title = `💭 Discussion opened`;
 			url = discussion.html_url;
@@ -209,7 +210,7 @@ handler.on('discussion', event => {
 			break;
 		case 'answered':
 			title = `✅ Discussion marked answer`;
-			url = discussion.answer_html_url;
+			url = event.answer.html_url;
 			break;
 		case 'unanswered':
 			title = `🔥 Discussion unmarked answer`;
@@ -223,10 +224,9 @@ handler.on('discussion', event => {
 handler.on('discussion_comment', event => {
 	const discussion = event.discussion;
 	const comment = event.comment;
-	const action = event.action;
 	let text: string;
-	switch (action) {
-		case 'created': text = `💬 Commented on "${discussion.title}": ${comment.user.login} "<plain>${comment.body}</plain>"\n${comment.html_url}`; break;
+	switch (event.action) {
+		case 'created': text = `💬 Commented on "${discussion.title}": ${event.sender.login} "<plain>${comment.body}</plain>"\n${comment.html_url}`; break;
 		default: return;
 	}
 	post(text);
