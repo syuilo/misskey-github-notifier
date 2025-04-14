@@ -9,7 +9,7 @@
 		"strictNullChecks": true,
 		"sourceMap": false,
 		"resolveJsonModule": true,
-		"target": "es6",
+		"target": "esnext",
 		"module": "commonjs",
 		"removeComments": false,
 		"noLib": false,
