@@ -10,7 +10,6 @@
     "@types/koa-router": "7.4.1",
     "@types/node": "22.14.1",
     "@types/request": "2.48.12",
-    "crypto": "1.0.1",
     "koa": "2.16.1",
     "koa-bodyparser": "4.4.1",
     "koa-router": "13.0.1",
@@ -19,6 +18,6 @@
     "typescript": "5.8.3"
   },
   "devDependencies": {
-    "@octokit/webhooks": "^13.2.7"
+    "@octokit/webhooks": "13.8.0"
   }
 }
