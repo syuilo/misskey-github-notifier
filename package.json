@@ -12,7 +12,7 @@
     "@types/request": "2.48.12",
     "crypto": "1.0.1",
     "koa": "2.13.0",
-    "koa-bodyparser": "4.3.0",
+    "koa-bodyparser": "4.4.1",
     "koa-router": "10.0.0",
     "request": "2.88.2",
     "ts-node": "10.9.2",
