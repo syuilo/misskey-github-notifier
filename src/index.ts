@@ -4,7 +4,7 @@ import * as Koa from 'koa';
 import * as Router from 'koa-router';
 import * as bodyParser from 'koa-bodyparser';
 import * as request from 'request';
-import crypto = require('crypto');
+import * as crypto from 'node:crypto';
 import type { EventPayloadMap } from '@octokit/webhooks/dist-types/generated/webhook-identifiers';
 
 const config = require('../config.json');
@@ -40,7 +40,7 @@ const router = new Router();
 router.post('/github', ctx => {
 	const body = JSON.stringify(ctx.request.body);
 	const hash = crypto.createHmac('sha1', secret).update(body).digest('hex');
-	const sig1 = Buffer.from(ctx.headers['x-hub-signature']);
+	const sig1 = Buffer.from(ctx.headers['x-hub-signature'] as string);
 	const sig2 = Buffer.from(`sha1=${hash}`);
 
 	// シグネチャ比較
